@@ -15,5 +15,11 @@
  * limitations under the License.
  */
 
-const { createConnection } = require('playwright/lib/mcp/index');
+const { createConnection: baseCreateConnection } = require('playwright/lib/mcp/index');
+
+async function createConnection(config, contextGetter) {
+  require('./extras/register-extra-tools').registerExtraTools();
+  return await baseCreateConnection(config, contextGetter);
+}
+
 module.exports = { createConnection };
