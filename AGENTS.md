@@ -22,6 +22,30 @@ When Codex runs the MCP server locally (stdio), the output folder is on your mac
 
 You can open that folder in Finder/Explorer, or click file paths/links shown in tool output (when supported by the client).
 
+### One local server for all IDE windows (recommended)
+
+If you keep multiple Cursor/VS Code windows open, run Playwright MCP once as a local HTTP service and point every client at it:
+
+1. Start the server (example):
+
+```bash
+npx -y @playwright/mcp@latest --port 8931 --headless --output-dir "$HOME/mcp-artifacts"
+```
+
+2. Configure your MCP client with the URL:
+
+```json
+{
+  "mcpServers": {
+    "playwright": { "url": "http://localhost:8931/mcp" }
+  }
+}
+```
+
+Notes:
+- With multiple simultaneous clients, prefer `--isolated` (and optionally `--storage-state=...`) to avoid persistent-profile locking.
+- `--shared-browser-context` makes all clients share one browser context (convenient for login), but keeps the browser running longer (more RAM).
+
 ### Remote (Azure) deployment
 
 If you deploy the MCP server to Azure, `--output-dir` points to the **server’s filesystem**, not your laptop. To avoid “logging into Azure” just to view images, use one of:
